@@ -11,6 +11,7 @@ const projects = defineCollection({
       summary: z.string(),
       category: z.enum(categoryKeys),
       date: z.coerce.date(),
+      dateEnd: z.coerce.date().optional(),
       cover: image(),
       coverAlt: z.string(),
       tags: z.array(z.string()).default([]),

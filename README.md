@@ -48,7 +48,7 @@ featured: true                # opcjonalne — wyświetla projekt na początku l
 …
 ```
 
-Przykładowe projekty są oznaczone jako „Przykładowy projekt” — usuń ich foldery, gdy dodasz własne.
+Zdjęcia z telefonu przed dodaniem warto przepuścić przez kompresję bez metadanych (usuwa lokalizację GPS) — repo jest publiczne.
 
 ## Design
 

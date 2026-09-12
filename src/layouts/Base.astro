@@ -39,6 +39,8 @@ const base = isHome ? '' : homePath(lang);
           target = match ?? 'en';
         }
         if (target !== pageLang) location.replace(alternate + location.hash);
+        // Po przełączeniu języka ukryj stronę do czasu przywrócenia pozycji przewijania
+        if (sessionStorage.getItem('langSwitchScroll')) document.documentElement.style.visibility = 'hidden';
       } catch {}
     </script>
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
@@ -102,6 +104,60 @@ const base = isHome ? '' : homePath(lang);
       </div>
     </footer>
 
+    <script is:inline>
+      // Przełączanie języka zostawia użytkownika w tym samym miejscu strony.
+      // Obie wersje językowe mają identyczną strukturę, więc pozycję zapisujemy
+      // jako indeks bloku + przesunięcie wewnątrz niego.
+      (() => {
+        const blocks = () => [...document.querySelectorAll('main section, main header, main figure, main .layout, main .pager, footer')];
+        const html = document.documentElement;
+
+        try {
+          const saved = JSON.parse(sessionStorage.getItem('langSwitchScroll') ?? 'null');
+          sessionStorage.removeItem('langSwitchScroll');
+          if (saved) {
+            const restore = () => {
+              const el = blocks()[saved.index];
+              const top = el ? el.getBoundingClientRect().top + scrollY + saved.offset : saved.y;
+              scrollTo({ top, behavior: 'instant' });
+            };
+            restore();
+            // Fonty i obrazy mogą jeszcze zmienić wysokość bloków — poprawiaj pozycję,
+            // dopóki strona się nie ustabilizuje albo użytkownik sam nie zacznie przewijać
+            let userScrolled = false;
+            const stop = () => (userScrolled = true);
+            ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((type) =>
+              addEventListener(type, stop, { once: true, passive: true }),
+            );
+            const settle = () => {
+              if (!userScrolled) restore();
+            };
+            addEventListener('DOMContentLoaded', settle, { once: true });
+            document.fonts?.ready.then(settle);
+            addEventListener('load', () => {
+              settle();
+              setTimeout(settle, 150);
+            }, { once: true });
+          }
+        } catch {}
+        html.style.visibility = '';
+
+        document.querySelector('.lang-switch')?.addEventListener('click', (event) => {
+          const link = event.currentTarget;
+          try {
+            localStorage.setItem('lang', link.dataset.lang ?? '');
+            const list = blocks();
+            let index = 0;
+            list.forEach((el, i) => {
+              if (el.getBoundingClientRect().top <= 1) index = i;
+            });
+            const offset = list[index] ? -list[index].getBoundingClientRect().top : scrollY;
+            sessionStorage.setItem('langSwitchScroll', JSON.stringify({ index, offset, y: scrollY }));
+          } catch {}
+        });
+      })();
+    </script>
+
     <script>
       const toggle = document.querySelector<HTMLButtonElement>('.theme-toggle');
       toggle?.addEventListener('click', () => {
@@ -110,14 +166,6 @@ const base = isHome ? '' : homePath(lang);
         try {
           localStorage.setItem('theme', next);
         } catch {}
-      });
-
-      document.querySelector<HTMLAnchorElement>('.lang-switch')?.addEventListener('click', (event) => {
-        const link = event.currentTarget as HTMLAnchorElement;
-        try {
-          localStorage.setItem('lang', link.dataset.lang ?? '');
-        } catch {}
-        link.href += location.hash;
       });
     </script>
 

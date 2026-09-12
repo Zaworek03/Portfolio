@@ -14,10 +14,17 @@ interface Props {
 
 const { lang, project, prev, next } = Astro.props;
 const t = useTranslations(lang);
-const { title, summary, category, date, cover, coverAlt, tags, role, duration, github, demo } = project.entry.data;
+const { title, summary, category, date, dateEnd, cover, coverAlt, tags, role, duration, github, demo } = project.entry.data;
 const { Content } = await render(project.entry);
 
-const dateLabel = new Intl.DateTimeFormat(lang === 'pl' ? 'pl-PL' : 'en-GB', { month: 'long', year: 'numeric' }).format(date);
+const locale = lang === 'pl' ? 'pl-PL' : 'en-GB';
+const month = new Intl.DateTimeFormat(locale, { month: 'long' });
+const monthYear = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' });
+const dateLabel = !dateEnd
+  ? monthYear.format(date)
+  : date.getFullYear() === dateEnd.getFullYear()
+    ? `${month.format(date)} – ${monthYear.format(dateEnd)}`
+    : `${monthYear.format(date)} – ${monthYear.format(dateEnd)}`;
 const specs = [
   [t('project.category'), t(`cat.${category}`)],
   [t('project.date'), dateLabel],
@@ -292,6 +299,9 @@ const specs = [
   }
 
   .prose :global(img) {
+    width: auto;
+    max-height: 75vh;
+    margin: 0 auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
   }
