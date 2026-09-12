@@ -65,8 +65,8 @@ const base = isHome ? '' : homePath(lang);
 
     <header class="nav">
       <div class="container nav-inner">
-        <a href={homePath(lang)} class="logo mono" aria-label={`${site.name} — ${t('nav.home')}`}>
-          {site.initials}<span>_</span>
+        <a href={homePath(lang)} class="logo" aria-label={`${site.name} — ${t('nav.home')}`}>
+          {site.name}
         </a>
         <nav aria-label={t('nav.aria')}>
           <ul>
@@ -203,13 +203,15 @@ const base = isHome ? '' : homePath(lang);
       }
 
       .logo {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
+        white-space: nowrap;
         text-decoration: none;
         color: var(--text);
+        transition: color 200ms var(--ease);
       }
 
-      .logo span {
+      .logo:hover {
         color: var(--accent);
       }
 

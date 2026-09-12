@@ -1,44 +1,42 @@
-// Twoje dane — zmień wartości oznaczone jako TODO
+// Dane kontaktowe
 export const site = {
   name: 'Bartosz Zawłocki',
-  initials: 'BZ',
-  email: 'kontakt@example.com', // TODO
-  github: 'https://github.com/', // TODO
-  linkedin: 'https://www.linkedin.com/', // TODO
+  email: 'zawlockibartosz@icloud.com',
+  github: 'https://github.com/Zaworek03',
 };
 
 // Teksty w dwóch językach
 export const siteText = {
   pl: {
-    role: 'Inżynier mechatroniki',
-    tagline: 'Projektuję i buduję maszyny — od modelu CAD, przez elektronikę, po firmware.',
+    role: 'Student mechatroniki',
+    tagline: 'Projektuję i buduję maszyny — od modelu CAD, przez elektronikę, po oprogramowanie sterownika.',
     location: 'Polska',
-    status: 'Otwarty na praktyki i pracę',
+    mailSubject: 'Portfolio zapytanie',
     about: [
-      'Jestem mechatronikiem, który lubi, gdy projekt przechodzi całą drogę: od szkicu i obliczeń, przez model 3D i płytkę PCB, aż po działający prototyp na biurku.',
+      'Studiuję mechatronikę na Politechnice Poznańskiej. Najbardziej lubię, gdy projekt przechodzi całą drogę: od szkicu i obliczeń, przez model 3D i płytkę PCB, aż po działający prototyp.',
       'Najlepiej czuję się na styku mechaniki, elektroniki i programowania — tam, gdzie trzeba zrozumieć cały układ, a nie tylko jeden jego element.',
     ],
     skills: [
-      { group: 'CAD / Mechanika', items: ['SolidWorks', 'Fusion 360', 'Druk 3D', 'Obróbka CNC', 'MES / FEA'] },
-      { group: 'Elektronika', items: ['KiCad', 'Projektowanie PCB', 'Lutowanie SMD', 'Oscyloskop', 'Napędy BLDC'] },
-      { group: 'Embedded', items: ['C / C++', 'STM32', 'ESP32', 'FreeRTOS', 'CAN / I²C / SPI'] },
-      { group: 'Automatyka / Software', items: ['Python', 'ROS 2', 'MATLAB / Simulink', 'PLC (TIA Portal)', 'Git'] },
+      { group: 'Automatyka', items: ['Siemens S7-1200 / TIA Portal (SCL)', 'B&R Automation Studio (ST, mapp)', 'Panele HMI', 'RFID / IO-Link', 'Modbus TCP, OPC UA', 'Systemy wizyjne'] },
+      { group: 'Elektronika', items: ['KiCad — schematy i PCB', 'Dobór elementów', 'Lutowanie SMD'] },
+      { group: 'Embedded', items: ['C / C++', 'ESP32-S3 (ESP-IDF, rejestry)', 'PWM, ADC', 'Regulacja PD'] },
+      { group: 'Software / Mechanika', items: ['C# / .NET, Blazor', 'MS SQL', 'Git', 'Druk 3D'] },
     ],
   },
   en: {
-    role: 'Mechatronics engineer',
-    tagline: 'I design and build machines — from CAD models, through electronics, to firmware.',
+    role: 'Mechatronics student',
+    tagline: 'I design and build machines — from CAD models, through electronics, to controller software.',
     location: 'Poland',
-    status: 'Open to internships and jobs',
+    mailSubject: 'Portfolio zapytanie',
     about: [
-      "I'm a mechatronics engineer who enjoys taking a project all the way: from sketches and calculations, through the 3D model and PCB, to a working prototype on my desk.",
+      "I study mechatronics at Poznań University of Technology. I enjoy taking a project all the way: from sketches and calculations, through the 3D model and PCB, to a working prototype.",
       "I'm most at home where mechanics, electronics and software meet — where you have to understand the whole system, not just one part of it.",
     ],
     skills: [
-      { group: 'CAD / Mechanical', items: ['SolidWorks', 'Fusion 360', '3D printing', 'CNC machining', 'FEA'] },
-      { group: 'Electronics', items: ['KiCad', 'PCB design', 'SMD soldering', 'Oscilloscope', 'BLDC drives'] },
-      { group: 'Embedded', items: ['C / C++', 'STM32', 'ESP32', 'FreeRTOS', 'CAN / I²C / SPI'] },
-      { group: 'Automation / Software', items: ['Python', 'ROS 2', 'MATLAB / Simulink', 'PLC (TIA Portal)', 'Git'] },
+      { group: 'Automation', items: ['Siemens S7-1200 / TIA Portal (SCL)', 'B&R Automation Studio (ST, mapp)', 'HMI panels', 'RFID / IO-Link', 'Modbus TCP, OPC UA', 'Machine vision'] },
+      { group: 'Electronics', items: ['KiCad — schematics and PCB', 'Component selection', 'SMD soldering'] },
+      { group: 'Embedded', items: ['C / C++', 'ESP32-S3 (ESP-IDF, registers)', 'PWM, ADC', 'PD control'] },
+      { group: 'Software / Mechanical', items: ['C# / .NET, Blazor', 'MS SQL', 'Git', '3D printing'] },
     ],
   },
 };

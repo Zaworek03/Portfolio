@@ -2,7 +2,7 @@
 title: Line Follower
 summary: Szybki robot jadący po linii — własna płytka PCB z ESP32-S3, 8 czujnikami odbiciowymi IR, mostkiem H L298N i regulatorem PD napisanym na rejestrach mikrokontrolera.
 category: elektronika
-date: 2025-11-01
+date: 2025-10-01
 dateEnd: 2026-01-31
 cover: ./robot.jpg
 coverAlt: Zmontowana czerwona płytka robota Line Follower z ESP32-S3, mostkiem H, dwoma silnikami z drukowanymi kołami i listwą ośmiu czujników

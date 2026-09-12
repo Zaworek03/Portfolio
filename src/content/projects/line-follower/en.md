@@ -2,7 +2,7 @@
 title: Line Follower
 summary: A fast line-following robot — custom PCB with an ESP32-S3, 8 IR reflective sensors, an L298N H-bridge and a PD controller written against the microcontroller's registers.
 category: elektronika
-date: 2025-11-01
+date: 2025-10-01
 dateEnd: 2026-01-31
 cover: ./robot.jpg
 coverAlt: Assembled red Line Follower PCB with an ESP32-S3, H-bridge, two motors with 3D-printed wheels and a strip of eight sensors
