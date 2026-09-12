@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#16223a" stroke-width="1"/></pattern></defs>
+<rect width="1600" height="1000" fill="#0b1220"/><rect width="1600" height="1000" fill="url(#g)"/>
+<rect x="40" y="40" width="1520" height="920" fill="none" stroke="#22314d" stroke-width="2"/>
+<g fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="480" y="260" width="640" height="480" rx="16"/><rect x="720" y="400" width="160" height="160"/>
+<path d="M720 430 h-40 M720 480 h-40 M720 530 h-40 M880 430 h40 M880 480 h40 M880 530 h40"/>
+<path d="M680 430 H560 V320 M680 530 H560 V680 M920 480 H1040 M920 430 L980 370 H1060"/>
+<circle cx="560" cy="320" r="14"/><circle cx="560" cy="680" r="14"/><circle cx="1040" cy="480" r="14"/><circle cx="1060" cy="370" r="14"/>
+<rect x="520" y="560" width="60" height="100"/><rect x="1000" y="580" width="80" height="120"/></g>
+<g font-family="monospace" fill="#94a3b8" font-size="28"><text x="80" y="100">PRJ / ELEKTRONIKA</text><text x="1520" y="920" text-anchor="end">STEROWNIK BLDC</text></g>
+<text x="80" y="920" font-family="monospace" fill="#475569" font-size="24">PLACEHOLDER — PODMIEŃ NA ZDJĘCIE / RENDER</text>
+</svg>

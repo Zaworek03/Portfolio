@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000">
+<defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#16223a" stroke-width="1"/></pattern></defs>
+<rect width="1600" height="1000" fill="#0b1220"/><rect width="1600" height="1000" fill="url(#g)"/>
+<rect x="40" y="40" width="1520" height="920" fill="none" stroke="#22314d" stroke-width="2"/>
+<g fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="620" y="760" width="360" height="60" rx="8"/><rect x="740" y="700" width="120" height="60"/>
+<path d="M800 700 L680 460 L960 300"/><circle cx="800" cy="700" r="26"/><circle cx="680" cy="460" r="26"/><circle cx="960" cy="300" r="26"/>
+<path d="M960 300 L1060 260 M1060 260 l40 -40 M1060 260 l50 20"/>
+<path d="M620 860 H980" stroke-dasharray="12 10" stroke="#94a3b8" stroke-width="2"/></g>
+<g font-family="monospace" fill="#94a3b8" font-size="28"><text x="80" y="100">PRJ / ROBOTYKA</text><text x="1520" y="920" text-anchor="end">RAMIĘ ROBOTA 6DOF</text></g>
+<text x="80" y="920" font-family="monospace" fill="#475569" font-size="24">PLACEHOLDER — PODMIEŃ NA ZDJĘCIE / RENDER</text>
+</svg>
