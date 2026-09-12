@@ -1,26 +1,46 @@
 ---
 import '../styles/global.css';
-import { site } from '../data/site';
+import { site, siteText } from '../data/site';
 import { url } from '../data/url';
+import { homePath, useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
+  lang: Lang;
+  /** Adres tej samej strony w drugim języku */
+  alternate: string;
+  isHome?: boolean;
   title?: string;
   description?: string;
 }
 
-const { title, description = site.tagline } = Astro.props;
-const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
-const isHome = Astro.url.pathname === url();
-const base = isHome ? '' : url();
+const { lang, alternate, isHome = false, title, description = siteText[lang].tagline } = Astro.props;
+const t = useTranslations(lang);
+const otherLang: Lang = lang === 'pl' ? 'en' : 'pl';
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${siteText[lang].role}`;
+const base = isHome ? '' : homePath(lang);
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="alternate" hreflang={lang} href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="alternate" hreflang={otherLang} href={new URL(alternate, Astro.site)} />
+    <script is:inline define:vars={{ pageLang: lang, alternate }}>
+      // Wybór języka: zapisany wybór użytkownika > język systemu (polski → PL, inny → EN)
+      try {
+        let target = localStorage.getItem('lang');
+        if (target !== 'pl' && target !== 'en') {
+          const prefs = navigator.languages?.length ? navigator.languages : [navigator.language];
+          const match = prefs.map((l) => l.toLowerCase().slice(0, 2)).find((l) => l === 'pl' || l === 'en');
+          target = match ?? 'en';
+        }
+        if (target !== pageLang) location.replace(alternate + location.hash);
+      } catch {}
+    </script>
     <link rel="icon" type="image/svg+xml" href={url('favicon.svg')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -39,22 +59,32 @@ const base = isHome ? '' : url();
     </script>
   </head>
   <body>
-    <a class="skip" href="#main">Przejdź do treści</a>
+    <a class="skip" href="#main">{t('nav.skip')}</a>
 
     <header class="nav">
       <div class="container nav-inner">
-        <a href={url()} class="logo mono" aria-label={`${site.name} — strona główna`}>
+        <a href={homePath(lang)} class="logo mono" aria-label={`${site.name} — ${t('nav.home')}`}>
           {site.initials}<span>_</span>
         </a>
-        <nav aria-label="Główna nawigacja">
+        <nav aria-label={t('nav.aria')}>
           <ul>
-            <li><a href={`${base}#projekty`}>Projekty</a></li>
-            <li><a href={`${base}#o-mnie`}>O mnie</a></li>
-            <li><a href={`${base}#umiejetnosci`}>Umiejętności</a></li>
-            <li><a href={`${base}#kontakt`}>Kontakt</a></li>
+            <li><a href={`${base}#projekty`}>{t('nav.projects')}</a></li>
+            <li><a href={`${base}#o-mnie`}>{t('nav.about')}</a></li>
+            <li><a href={`${base}#umiejetnosci`}>{t('nav.skills')}</a></li>
+            <li><a href={`${base}#kontakt`}>{t('nav.contact')}</a></li>
           </ul>
         </nav>
-        <button class="theme-toggle" type="button" aria-label="Przełącz motyw jasny / ciemny">
+        <a
+          class="lang-switch mono"
+          href={alternate}
+          hreflang={otherLang}
+          lang={otherLang}
+          data-lang={otherLang}
+          aria-label={t('nav.switchLang')}
+        >
+          {otherLang.toUpperCase()}
+        </a>
+        <button class="theme-toggle" type="button" aria-label={t('nav.theme')}>
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
         </button>
@@ -68,7 +98,7 @@ const base = isHome ? '' : url();
     <footer class="footer">
       <div class="container footer-inner mono">
         <span>© {new Date().getFullYear()} {site.name}</span>
-        <span>REV. A · ARKUSZ 1/1</span>
+        <span>{t('footer.sheet')}</span>
       </div>
     </footer>
 
@@ -80,6 +110,14 @@ const base = isHome ? '' : url();
         try {
           localStorage.setItem('theme', next);
         } catch {}
+      });
+
+      document.querySelector<HTMLAnchorElement>('.lang-switch')?.addEventListener('click', (event) => {
+        const link = event.currentTarget as HTMLAnchorElement;
+        try {
+          localStorage.setItem('lang', link.dataset.lang ?? '');
+        } catch {}
+        link.href += location.hash;
       });
     </script>
 
@@ -154,6 +192,28 @@ const base = isHome ? '' : url();
         color: var(--text);
       }
 
+      .lang-switch {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition:
+          border-color 200ms var(--ease),
+          color 200ms var(--ease);
+      }
+
+      .lang-switch:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
       .theme-toggle {
         display: grid;
         place-items: center;
@@ -223,7 +283,7 @@ const base = isHome ? '' : url();
           white-space: nowrap;
         }
 
-        .theme-toggle {
+        .lang-switch {
           margin-left: auto;
         }
       }

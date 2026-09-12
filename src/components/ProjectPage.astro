@@ -1,0 +1,411 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import type { LocalizedProject } from '../i18n/projects';
+import { homePath, projectPath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  project: LocalizedProject;
+  prev?: LocalizedProject;
+  next?: LocalizedProject;
+}
+
+const { lang, project, prev, next } = Astro.props;
+const t = useTranslations(lang);
+const { title, summary, category, date, cover, coverAlt, tags, role, duration, github, demo } = project.entry.data;
+const { Content } = await render(project.entry);
+
+const dateLabel = new Intl.DateTimeFormat(lang === 'pl' ? 'pl-PL' : 'en-GB', { month: 'long', year: 'numeric' }).format(date);
+const specs = [
+  [t('project.category'), t(`cat.${category}`)],
+  [t('project.date'), dateLabel],
+  [t('project.role'), role],
+  [t('project.duration'), duration],
+].filter((row): row is [string, string] => Boolean(row[1]));
+---
+
+<Base lang={lang} alternate={projectPath(lang === 'pl' ? 'en' : 'pl', project.slug)} title={title} description={summary}>
+  <article>
+    <header class="head">
+      <div class="container">
+        <a class="back mono" href={`${homePath(lang)}#projekty`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+          {t('project.back')}
+        </a>
+        <p class="eyebrow">// {t(`cat.${category}`).toLowerCase()}</p>
+        <h1>{title}</h1>
+        <p class="lead">{summary}</p>
+        {
+          (github || demo) && (
+            <div class="links">
+              {github && (
+                <a class="btn btn-primary" href={github} target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+                  {t('project.github')}
+                </a>
+              )}
+              {demo && (
+                <a class="btn" href={demo} target="_blank" rel="noopener noreferrer">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+                  {t('project.demo')}
+                </a>
+              )}
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="container">
+      <figure class="cover corners">
+        <Image src={cover} alt={coverAlt} widths={[800, 1200, 1600]} sizes="(max-width: 1160px) 100vw, 1112px" loading="eager" />
+      </figure>
+
+      <div class="layout">
+        <aside class="spec mono" aria-label={t('project.specAria')}>
+          <p class="spec-title">{t('project.spec')}</p>
+          <dl>
+            {
+              specs.map(([label, value]) => (
+                <div>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          {
+            tags.length > 0 && (
+              <div class="spec-tags">
+                <p class="spec-label">{t('projects.tech')}</p>
+                <ul>
+                  {tags.map((tag) => (
+                    <li class="tag">{tag}</li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </aside>
+
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+
+      <nav class="pager" aria-label={t('project.other')}>
+        {
+          prev ? (
+            <a href={projectPath(lang, prev.slug)} class="pager-link">
+              <span class="mono">{t('project.newer')}</span>
+              <strong>{prev.entry.data.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next && (
+            <a href={projectPath(lang, next.slug)} class="pager-link pager-next">
+              <span class="mono">{t('project.older')}</span>
+              <strong>{next.entry.data.title}</strong>
+            </a>
+          )
+        }
+      </nav>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .head {
+    padding: 48px 0 40px;
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-bottom: 24px;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 200ms var(--ease);
+  }
+
+  .back:hover {
+    color: var(--accent);
+  }
+
+  .back svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 12px 0 16px;
+    max-width: 20ch;
+  }
+
+  .lead {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 60ch;
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .cover {
+    margin: 0;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-2);
+  }
+
+  .cover :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 56px;
+    padding: 56px 0 72px;
+    align-items: start;
+  }
+
+  .spec {
+    position: sticky;
+    top: 88px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 13px;
+  }
+
+  .spec-title {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent);
+  }
+
+  .spec dl {
+    margin: 0;
+  }
+
+  .spec dl div {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .spec dt,
+  .spec-label {
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .spec dd {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .spec-tags {
+    padding: 12px 16px 16px;
+  }
+
+  .spec-tags ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+
+  /* Treść z pliku Markdown */
+  .prose {
+    font-size: 17px;
+    line-height: 1.75;
+    max-width: 70ch;
+  }
+
+  .prose :global(> * + *) {
+    margin-top: 1.1em;
+  }
+
+  .prose :global(h2) {
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid var(--border);
+  }
+
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .prose :global(h3) {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 1.6em;
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--text-muted);
+  }
+
+  .prose :global(strong) {
+    color: var(--text);
+  }
+
+  .prose :global(a) {
+    color: var(--accent);
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.3em;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 0.4em;
+  }
+
+  .prose :global(img) {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+  }
+
+  .prose :global(pre) {
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .prose :global(table) {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+  }
+
+  .prose :global(th) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .prose :global(blockquote) {
+    margin-left: 0;
+    padding: 4px 0 4px 20px;
+    border-left: 2px solid var(--accent);
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 40px 0 96px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pager-link {
+    display: grid;
+    gap: 6px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    text-decoration: none;
+    transition: border-color 200ms var(--ease);
+  }
+
+  .pager-link:hover {
+    border-color: var(--accent);
+  }
+
+  .pager-link span {
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .pager-link strong {
+    font-size: 18px;
+  }
+
+  .pager-next {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .spec {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .pager {
+      grid-template-columns: 1fr;
+    }
+
+    .pager-next {
+      grid-column: auto;
+    }
+  }
+</style>

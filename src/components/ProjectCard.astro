@@ -1,16 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
-import { categories } from '../content.config';
-import { url } from '../data/url';
+import type { LocalizedProject } from '../i18n/projects';
+import { projectPath, useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
-  project: CollectionEntry<'projects'>;
+  project: LocalizedProject;
   index: number;
+  lang: Lang;
 }
 
-const { project, index } = Astro.props;
-const { title, summary, category, cover, coverAlt, tags, date } = project.data;
+const { project, index, lang } = Astro.props;
+const t = useTranslations(lang);
+const { title, summary, category, cover, coverAlt, tags, date } = project.entry.data;
 const code = `PRJ-${String(index + 1).padStart(2, '0')}`;
 ---
 
@@ -21,13 +22,13 @@ const code = `PRJ-${String(index + 1).padStart(2, '0')}`;
   <div class="body">
     <div class="meta mono">
       <span>{code}</span>
-      <span>{categories[category]} · {date.getFullYear()}</span>
+      <span>{t(`cat.${category}`)} · {date.getFullYear()}</span>
     </div>
     <h3>
-      <a href={url(`projekty/${project.id}/`)}>{title}</a>
+      <a href={projectPath(lang, project.slug)}>{title}</a>
     </h3>
     <p>{summary}</p>
-    <ul class="tags" aria-label="Technologie">
+    <ul class="tags" aria-label={t('projects.tech')}>
       {tags.slice(0, 4).map((tag) => <li class="tag">{tag}</li>)}
     </ul>
   </div>

@@ -1,22 +1,15 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-
-export const categories = {
-  robotyka: 'Robotyka',
-  elektronika: 'Elektronika',
-  cad: 'CAD / Mechanika',
-  embedded: 'Embedded',
-  automatyka: 'Automatyka',
-} as const;
+import { categoryKeys } from './i18n/ui';
 
 const projects = defineCollection({
-  loader: glob({ pattern: '*/index.md', base: './src/content/projects' }),
+  loader: glob({ pattern: '*/{pl,en}.md', base: './src/content/projects' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
       summary: z.string(),
-      category: z.enum(Object.keys(categories) as [keyof typeof categories, ...(keyof typeof categories)[]]),
+      category: z.enum(categoryKeys),
       date: z.coerce.date(),
       cover: image(),
       coverAlt: z.string(),

@@ -1,0 +1,429 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from './ProjectCard.astro';
+import { site, siteText } from '../data/site';
+import { getProjects } from '../i18n/projects';
+import { categoryKeys, homePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const text = siteText[lang];
+const projects = await getProjects(lang);
+
+const usedCategories = categoryKeys.filter((key) => projects.some((p) => p.entry.data.category === key));
+const years = projects.map((p) => p.entry.data.date.getFullYear());
+const yearRange = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : '—';
+---
+
+<Base lang={lang} alternate={homePath(lang === 'pl' ? 'en' : 'pl')} isHome>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">// {text.role.toLowerCase()}</p>
+        <h1>{site.name}</h1>
+        <p class="lead">{text.tagline}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#projekty">
+            {t('hero.cta')}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"></path></svg>
+          </a>
+          <a class="btn" href="#kontakt">{t('hero.contact')}</a>
+        </div>
+      </div>
+
+      <aside class="title-block corners mono" aria-label={t('hero.summary')}>
+        <div class="tb-head">
+          <span>{t('hero.titleBlock')}</span>
+          <span class="status"><i aria-hidden="true"></i>{text.status}</span>
+        </div>
+        <dl>
+          <div><dt>{t('hero.projects')}</dt><dd>{String(projects.length).padStart(2, '0')}</dd></div>
+          <div><dt>{t('hero.areas')}</dt><dd>{String(usedCategories.length).padStart(2, '0')}</dd></div>
+          <div><dt>{t('hero.years')}</dt><dd>{yearRange}</dd></div>
+          <div><dt>{t('hero.location')}</dt><dd>{text.location}</dd></div>
+        </dl>
+        <div class="tb-foot">
+          <span>{t('hero.scale')}</span>
+          <span>MECH · ELEC · CODE</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PROJEKTY -->
+  <section id="projekty" class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">{t('projects.eyebrow')}</p>
+          <h2>{t('projects.title')}</h2>
+        </div>
+        <div class="filters" role="group" aria-label={t('projects.filter')}>
+          <button type="button" class="filter" data-filter="all" aria-pressed="true">{t('projects.all')}</button>
+          {
+            usedCategories.map((key) => (
+              <button type="button" class="filter" data-filter={key} aria-pressed="false">
+                {t(`cat.${key}`)}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="grid">
+        {projects.map((project, i) => <ProjectCard project={project} index={i} lang={lang} />)}
+      </div>
+      <p class="empty" hidden>{t('projects.empty')}</p>
+      <p class="sr-only" aria-live="polite" id="filter-status" data-label={t('projects.shown')}></p>
+    </div>
+  </section>
+
+  <!-- O MNIE -->
+  <section id="o-mnie" class="section band">
+    <div class="container about">
+      <div>
+        <p class="eyebrow">{t('about.eyebrow')}</p>
+        <h2>{t('about.title')}</h2>
+      </div>
+      <div class="about-text">
+        {text.about.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- UMIEJĘTNOŚCI -->
+  <section id="umiejetnosci" class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">{t('skills.eyebrow')}</p>
+          <h2>{t('skills.title')}</h2>
+        </div>
+      </div>
+      <div class="skills">
+        {
+          text.skills.map((group, i) => (
+            <div class="skill-group">
+              <p class="mono skill-index">{String.fromCharCode(65 + i)}</p>
+              <h3>{group.group}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section id="kontakt" class="section">
+    <div class="container">
+      <div class="contact corners">
+        <p class="eyebrow">{t('contact.eyebrow')}</p>
+        <h2>{t('contact.title')}</h2>
+        <p class="lead">{t('contact.lead')}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href={`mailto:${site.email}`}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 6L2 7"></path></svg>
+            {site.email}
+          </a>
+          <a class="btn" href={site.github} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
+            GitHub
+          </a>
+          <a class="btn" href={site.linkedin} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter');
+  const cards = document.querySelectorAll<HTMLElement>('.grid > .card');
+  const empty = document.querySelector<HTMLElement>('.empty');
+  const status = document.getElementById('filter-status');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.hidden = !show;
+        if (show) visible++;
+      });
+
+      if (empty) empty.hidden = visible > 0;
+      if (status) status.textContent = `${status.dataset.label} ${visible}`;
+    });
+  });
+</script>
+
+<style>
+  .hero {
+    padding: 96px 0 72px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 56px;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: clamp(44px, 7vw, 80px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 16px 0 20px;
+  }
+
+  .lead {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--text-muted);
+    max-width: 34ch;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .title-block {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    font-size: 13px;
+  }
+
+  .tb-head,
+  .tb-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    color: var(--text-muted);
+  }
+
+  .tb-head {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tb-foot {
+    border-top: 1px solid var(--border);
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+  }
+
+  .status i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+  }
+
+  dl div {
+    padding: 16px;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  dl div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  dl div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+
+  dt {
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  dd {
+    margin: 6px 0 0;
+    font-size: 22px;
+    color: var(--text);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    cursor: pointer;
+    transition:
+      border-color 200ms var(--ease),
+      color 200ms var(--ease),
+      background-color 200ms var(--ease);
+  }
+
+  .filter:hover {
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+
+  .filter[aria-pressed='true'] {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+    gap: 24px;
+  }
+
+  .empty {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .band {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 56px;
+  }
+
+  .about h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  .about-text {
+    display: grid;
+    gap: 20px;
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+
+  .skills {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .skill-group {
+    padding: 28px 24px;
+    border-right: 1px solid var(--border);
+    margin-right: -1px;
+  }
+
+  .skill-index {
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .skill-group h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 6px 0 16px;
+  }
+
+  .skill-group ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .skill-group li {
+    color: var(--text-muted);
+    font-size: 15px;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .skill-group li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 8px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .contact {
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    padding: clamp(32px, 6vw, 64px);
+  }
+
+  .contact h2 {
+    font-size: clamp(28px, 4.5vw, 48px);
+    font-weight: 700;
+    margin: 12px 0 16px;
+    max-width: 20ch;
+  }
+
+  .contact .lead {
+    max-width: 48ch;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid,
+    .about {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .hero {
+      padding: 56px 0;
+    }
+  }
+</style>
