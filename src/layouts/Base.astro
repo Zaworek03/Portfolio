@@ -324,13 +324,20 @@ const base = isHome ? '' : homePath(lang);
         nav ul {
           justify-content: space-between;
           gap: 0;
-          margin: 0 -8px;
         }
 
         nav a {
-          padding: 0 8px;
+          padding: 0 6px;
           font-size: 14px;
           white-space: nowrap;
+        }
+
+        nav li:first-child a {
+          padding-left: 0;
+        }
+
+        nav li:last-child a {
+          padding-right: 0;
         }
 
         .lang-switch {

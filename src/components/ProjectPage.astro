@@ -442,7 +442,7 @@ const specs = [
 
   @media (max-width: 900px) {
     .layout {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: 40px;
     }
 
@@ -453,7 +453,7 @@ const specs = [
 
   @media (max-width: 600px) {
     .pager {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .pager-next {
