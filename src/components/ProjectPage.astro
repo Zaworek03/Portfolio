@@ -1,7 +1,8 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import { url } from '../data/url';
 import type { LocalizedProject } from '../i18n/projects';
 import { homePath, projectPath, useTranslations, type Lang } from '../i18n/ui';
 
@@ -14,8 +15,9 @@ interface Props {
 
 const { lang, project, prev, next } = Astro.props;
 const t = useTranslations(lang);
-const { title, summary, category, date, dateEnd, cover, coverAlt, tags, role, duration, github, demo } = project.entry.data;
+const { title, summary, category, date, dateEnd, cover, coverAlt, tags, role, duration, video, github, demo } = project.entry.data;
 const { Content } = await render(project.entry);
+const videoPoster = video?.poster ? await getImage({ src: video.poster, width: 720, format: 'webp' }) : undefined;
 
 const locale = lang === 'pl' ? 'pl-PL' : 'en-GB';
 const month = new Intl.DateTimeFormat(locale, { month: 'long' });
@@ -98,6 +100,23 @@ const specs = [
         </aside>
 
         <div class="prose">
+          {
+            video && (
+              <figure class="video">
+                <video
+                  controls
+                  playsinline
+                  preload="none"
+                  poster={videoPoster?.src}
+                  width={videoPoster?.attributes.width}
+                  height={videoPoster?.attributes.height}
+                >
+                  <source src={url(video.src)} type="video/mp4" />
+                </video>
+                {video.caption && <figcaption class="mono">{video.caption}</figcaption>}
+              </figure>
+            )
+          }
           <Content />
         </div>
       </div>
@@ -304,6 +323,29 @@ const specs = [
     margin: 0 auto;
     border: 1px solid var(--border);
     border-radius: var(--radius);
+  }
+
+  .video {
+    margin: 0 0 2em;
+  }
+
+  .video video {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 75vh;
+    margin: 0 auto;
+    background: #000;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .video figcaption {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
   }
 
   .prose :global(code) {

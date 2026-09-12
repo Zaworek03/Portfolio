@@ -17,6 +17,14 @@ const projects = defineCollection({
       tags: z.array(z.string()).default([]),
       role: z.string().optional(),
       duration: z.string().optional(),
+      /** Film z folderu public/, np. projects/line-follower/przejazd.mp4 */
+      video: z
+        .object({
+          src: z.string(),
+          poster: image().optional(),
+          caption: z.string().optional(),
+        })
+        .optional(),
       github: z.url().optional(),
       demo: z.url().optional(),
       featured: z.boolean().default(false),

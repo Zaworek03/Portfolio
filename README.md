@@ -38,6 +38,11 @@ duration: 3 miesiące          # opcjonalne
 github: https://github.com/…  # opcjonalne
 demo: https://youtube.com/…   # opcjonalne
 featured: true                # opcjonalne — wyświetla projekt na początku listy
+dateEnd: 2026-08-31           # opcjonalne — data zakończenia (zakres dat)
+video:                        # opcjonalne — film MP4 wrzucony do public/projects/<slug>/
+  src: projects/moj-projekt/film.mp4
+  poster: ./okladka-filmu.jpg
+  caption: Opis filmu
 ---
 
 ## Problem

@@ -6,13 +6,17 @@ date: 2026-07-01
 cover: ./stanowisko.jpg
 coverAlt: Warcabot cell — aluminium profile enclosure with a Comau robot, checkers board, camera above the board and control cabinet below
 tags: [B&R Automation Studio, Structured Text, mapp Motion, mapp Vision, mapp View, Comau Racer 3, OPC UA, POWERLINK, C / Python]
-role: Team project — 6 people
+role: Team leader (6 people)
 github: https://github.com/Zaworek03/Warcbot
 ---
 
 **Warcabot** is an automated cell where a six-axis **Comau Racer 3** industrial robot plays a full game of checkers against a human. The player chooses moves only on a touch panel, while every physical action on the board — moving pieces, captures and placing captured pieces in a buffer — is done by the robot. A camera continuously verifies piece positions and the correctness of each move.
 
 ![Sketch of the Warcabot cell](./szkic-stanowiska.png)
+
+## My role
+
+I was the **leader of a 6-person team**. I managed the whole project workflow: **assigning tasks**, tracking progress and **merging the code** from all team members into one working application.
 
 ## How it works
 

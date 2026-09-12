@@ -6,13 +6,17 @@ date: 2026-07-01
 cover: ./stanowisko.jpg
 coverAlt: Stanowisko Warcabot — cela z profili aluminiowych z robotem Comau, planszą do warcabów, kamerą nad planszą i szafą sterowniczą w dolnej części
 tags: [B&R Automation Studio, Structured Text, mapp Motion, mapp Vision, mapp View, Comau Racer 3, OPC UA, POWERLINK, C / Python]
-role: Projekt zespołowy — 6 osób
+role: Lider zespołu (6 osób)
 github: https://github.com/Zaworek03/Warcbot
 ---
 
 **Warcabot** to zautomatyzowane stanowisko, na którym sześcioosiowy robot przemysłowy **Comau Racer 3** rozgrywa pełną partię warcabów przeciwko człowiekowi. Gracz wybiera ruchy wyłącznie na dotykowym panelu, a wszystkie czynności fizyczne na planszy — przesuwanie pionków, bicie i odkładanie zbitych pionków do bufora — wykonuje robot. Kamera na bieżąco weryfikuje położenie pionków i poprawność każdego ruchu.
 
 ![Szkic stanowiska Warcabot](./szkic-stanowiska.png)
+
+## Moja rola
+
+Byłem **liderem 6-osobowego zespołu**. Zarządzałem całym workflow projektu: **przydzielałem zadania**, pilnowałem postępu prac i odpowiadałem za **łączenie kodu** poszczególnych członków zespołu w jedną działającą aplikację.
 
 ## Jak działa
 
