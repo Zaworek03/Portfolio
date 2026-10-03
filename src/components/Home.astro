@@ -90,6 +90,15 @@ const yearRange = years.length ? `${Math.min(...years)}–${Math.max(...years)}`
       </div>
       <div class="about-text">
         {text.about.map((paragraph) => <p>{paragraph}</p>)}
+        <div
+          class="badge"
+          data-iframe-width="150"
+          data-iframe-height="270"
+          data-share-badge-id="0803862d-f325-4ea4-9b01-9cfc5996a36e"
+          data-share-badge-host="https://www.credly.com"
+        >
+        </div>
+        <script is:inline async src="https://cdn.credly.com/assets/utilities/embed.js"></script>
       </div>
     </div>
   </section>
@@ -325,6 +334,10 @@ const yearRange = years.length ? `${Math.min(...years)}–${Math.max(...years)}`
     font-size: 18px;
     color: var(--text-muted);
     max-width: 62ch;
+  }
+
+  .badge {
+    min-height: 270px;
   }
 
   .skills {
