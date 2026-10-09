@@ -1,39 +1,33 @@
-/* Design system: Blueprint — rysunek techniczny */
+/* Design system: minimalistyczny, neutralny */
 
 :root {
-  --bg: #f4f7fb;
-  --surface: #ffffff;
-  --surface-2: #eaf0f7;
-  --grid: #e1e8f1;
-  --border: #cbd5e1;
-  --border-strong: #94a3b8;
-  --text: #0f172a;
-  --text-muted: #475569;
-  --accent: #0369a1;
-  --accent-soft: #e0f2fe;
+  --bg: #ffffff;
+  --surface: #f5f5f4;
+  --border: #e7e5e4;
+  --border-strong: #d6d3d1;
+  --text: #1c1917;
+  --text-muted: #57534e;
+  --accent: #1c1917;
   --on-accent: #ffffff;
 
-  --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-  --radius: 6px;
-  --container: 1160px;
+  --radius: 8px;
+  --container: 1040px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #0b1220;
-  --surface: #0f1829;
-  --surface-2: #131f35;
-  --grid: #142038;
-  --border: #22314d;
-  --border-strong: #3b4d6e;
-  --text: #e2e8f0;
-  --text-muted: #94a3b8;
-  --accent: #38bdf8;
-  --accent-soft: #0c2a42;
-  --on-accent: #0b1220;
+  --bg: #0c0c0c;
+  --surface: #171717;
+  --border: #262626;
+  --border-strong: #404040;
+  --text: #f5f5f5;
+  --text-muted: #a3a3a3;
+  --accent: #f5f5f5;
+  --on-accent: #0c0c0c;
   color-scheme: dark;
 }
 
@@ -50,11 +44,7 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 16px;
@@ -75,8 +65,10 @@ a {
 h1,
 h2,
 h3 {
-  line-height: 1.15;
+  line-height: 1.2;
   margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -97,34 +89,20 @@ p {
   padding: 0 24px;
 }
 
-.mono {
-  font-family: var(--font-mono);
-}
-
-.eyebrow {
-  font-family: var(--font-mono);
+.label {
   font-size: 13px;
-  color: var(--accent);
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  color: var(--text-muted);
 }
 
 .section {
   padding: 96px 0;
+  border-top: 1px solid var(--border);
 }
 
-.section-head {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
+.section-title {
+  font-size: clamp(24px, 3vw, 30px);
   margin-bottom: 40px;
-}
-
-.section-head h2 {
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 700;
-  margin-top: 8px;
 }
 
 .btn {
@@ -132,10 +110,10 @@ p {
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  padding: 0 20px;
+  padding: 0 18px;
   border-radius: var(--radius);
   border: 1px solid var(--border-strong);
-  background: var(--surface);
+  background: transparent;
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 15px;
@@ -145,12 +123,11 @@ p {
   transition:
     background-color 200ms var(--ease),
     border-color 200ms var(--ease),
-    color 200ms var(--ease);
+    opacity 200ms var(--ease);
 }
 
 .btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--text);
 }
 
 .btn-primary {
@@ -160,8 +137,7 @@ p {
 }
 
 .btn-primary:hover {
-  color: var(--on-accent);
-  filter: brightness(1.08);
+  opacity: 0.85;
 }
 
 .btn svg {
@@ -171,41 +147,12 @@ p {
 }
 
 .tag {
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 2px 8px;
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 2px 10px;
   white-space: nowrap;
-}
-
-/* Znaczniki narożników jak na arkuszu rysunkowym */
-.corners {
-  position: relative;
-}
-
-.corners::before,
-.corners::after {
-  content: '';
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-color: var(--accent);
-  border-style: solid;
-  pointer-events: none;
-}
-
-.corners::before {
-  top: -1px;
-  left: -1px;
-  border-width: 2px 0 0 2px;
-}
-
-.corners::after {
-  bottom: -1px;
-  right: -1px;
-  border-width: 0 2px 2px 0;
 }
 
 .sr-only {

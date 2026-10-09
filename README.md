@@ -57,4 +57,4 @@ Zdjęcia z telefonu przed dodaniem warto przepuścić przez kompresję bez metad
 
 ## Design
 
-Kierunek „Blueprint” (rysunek techniczny): Space Grotesk + JetBrains Mono, akcent `#38BDF8` w trybie ciemnym i `#0369A1` w jasnym. Kolory zmieniasz w `src/styles/global.css`.
+Minimalistyczny, neutralny styl: font Inter, odcienie szarości, jasny i ciemny motyw. Kolory zmieniasz w `src/styles/global.css`.

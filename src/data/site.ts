@@ -11,7 +11,7 @@ export const siteText = {
     role: 'Student mechatroniki',
     tagline: 'Projektuję i buduję maszyny — od modelu CAD, przez elektronikę, po oprogramowanie sterownika.',
     location: 'Polska',
-    mailSubject: 'Portfolio zapytanie',
+    mailSubject: 'Portfolio',
     about: [
       'Studiuję mechatronikę na Politechnice Poznańskiej. Najbardziej lubię, gdy projekt przechodzi całą drogę: od szkicu i obliczeń, przez model 3D i płytkę PCB, aż po działający prototyp.',
       'Najlepiej czuję się na styku mechaniki, elektroniki i programowania — tam, gdzie trzeba zrozumieć cały układ, a nie tylko jeden jego element.',
@@ -27,7 +27,7 @@ export const siteText = {
     role: 'Mechatronics student',
     tagline: 'I design and build machines — from CAD models, through electronics, to controller software.',
     location: 'Poland',
-    mailSubject: 'Portfolio zapytanie',
+    mailSubject: 'Portfolio',
     about: [
       "I study mechatronics at Poznań University of Technology. I enjoy taking a project all the way: from sketches and calculations, through the 3D model and PCB, to a working prototype.",
       "I'm most at home where mechanics, electronics and software meet — where you have to understand the whole system, not just one part of it.",

@@ -28,8 +28,6 @@ const dateLabel = !dateEnd
     ? `${month.format(date)} – ${monthYear.format(dateEnd)}`
     : `${monthYear.format(date)} – ${monthYear.format(dateEnd)}`;
 const specs = [
-  [t('project.category'), t(`cat.${category}`)],
-  [t('project.date'), dateLabel],
   [t('project.role'), role],
   [t('project.duration'), duration],
 ].filter((row): row is [string, string] => Boolean(row[1]));
@@ -39,11 +37,8 @@ const specs = [
   <article>
     <header class="head">
       <div class="container">
-        <a class="back mono" href={`${homePath(lang)}#projekty`}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
-          {t('project.back')}
-        </a>
-        <p class="eyebrow">// {t(`cat.${category}`).toLowerCase()}</p>
+        <a class="back" href={`${homePath(lang)}#projekty`}>← {t('project.back')}</a>
+        <p class="label">{t(`cat.${category}`)} · {dateLabel}</p>
         <h1>{title}</h1>
         <p class="lead">{summary}</p>
         {
@@ -51,13 +46,11 @@ const specs = [
             <div class="links">
               {github && (
                 <a class="btn btn-primary" href={github} target="_blank" rel="noopener noreferrer">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg>
                   {t('project.github')}
                 </a>
               )}
               {demo && (
                 <a class="btn" href={demo} target="_blank" rel="noopener noreferrer">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
                   {t('project.demo')}
                 </a>
               )}
@@ -68,13 +61,12 @@ const specs = [
     </header>
 
     <div class="container">
-      <figure class="cover corners">
-        <Image src={cover} alt={coverAlt} widths={[800, 1200, 1600]} sizes="(max-width: 1160px) 100vw, 1112px" loading="eager" />
+      <figure class="cover">
+        <Image src={cover} alt={coverAlt} widths={[800, 1200, 1600]} sizes="(max-width: 1040px) 100vw, 992px" loading="eager" />
       </figure>
 
       <div class="layout">
-        <aside class="spec mono" aria-label={t('project.specAria')}>
-          <p class="spec-title">{t('project.spec')}</p>
+        <aside class="spec" aria-label={t('project.specAria')}>
           <dl>
             {
               specs.map(([label, value]) => (
@@ -84,19 +76,21 @@ const specs = [
                 </div>
               ))
             }
+            {
+              tags.length > 0 && (
+                <div>
+                  <dt>{t('projects.tech')}</dt>
+                  <dd>
+                    <ul class="tags">
+                      {tags.map((tag) => (
+                        <li class="tag">{tag}</li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              )
+            }
           </dl>
-          {
-            tags.length > 0 && (
-              <div class="spec-tags">
-                <p class="spec-label">{t('projects.tech')}</p>
-                <ul>
-                  {tags.map((tag) => (
-                    <li class="tag">{tag}</li>
-                  ))}
-                </ul>
-              </div>
-            )
-          }
         </aside>
 
         <div class="prose">
@@ -113,7 +107,7 @@ const specs = [
                 >
                   <source src={url(video.src)} type="video/mp4" />
                 </video>
-                {video.caption && <figcaption class="mono">{video.caption}</figcaption>}
+                {video.caption && <figcaption>{video.caption}</figcaption>}
               </figure>
             )
           }
@@ -125,7 +119,7 @@ const specs = [
         {
           prev ? (
             <a href={projectPath(lang, prev.slug)} class="pager-link">
-              <span class="mono">{t('project.newer')}</span>
+              <span class="label">{t('project.newer')}</span>
               <strong>{prev.entry.data.title}</strong>
             </a>
           ) : (
@@ -135,7 +129,7 @@ const specs = [
         {
           next && (
             <a href={projectPath(lang, next.slug)} class="pager-link pager-next">
-              <span class="mono">{t('project.older')}</span>
+              <span class="label">{t('project.older')}</span>
               <strong>{next.entry.data.title}</strong>
             </a>
           )
@@ -147,36 +141,29 @@ const specs = [
 
 <style>
   .head {
-    padding: 48px 0 40px;
+    padding: 48px 0 48px;
   }
 
   .back {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
     min-height: 44px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 15px;
     text-decoration: none;
     transition: color 200ms var(--ease);
   }
 
   .back:hover {
-    color: var(--accent);
-  }
-
-  .back svg {
-    width: 16px;
-    height: 16px;
+    color: var(--text);
   }
 
   h1 {
-    font-size: clamp(36px, 6vw, 64px);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-size: clamp(34px, 5vw, 52px);
+    letter-spacing: -0.03em;
     margin: 12px 0 16px;
-    max-width: 20ch;
+    max-width: 22ch;
   }
 
   .lead {
@@ -194,8 +181,9 @@ const specs = [
 
   .cover {
     margin: 0;
-    border: 1px solid var(--border-strong);
-    background: var(--surface-2);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--surface);
   }
 
   .cover :global(img) {
@@ -206,60 +194,40 @@ const specs = [
 
   .layout {
     display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: 56px;
-    padding: 56px 0 72px;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 64px;
+    padding: 64px 0 80px;
     align-items: start;
   }
 
   .spec {
     position: sticky;
-    top: 88px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-  }
-
-  .spec-title {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    color: var(--accent);
+    top: 96px;
   }
 
   .spec dl {
     margin: 0;
+    display: grid;
+    gap: 24px;
   }
 
-  .spec dl div {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .spec dt,
-  .spec-label {
+  .spec dt {
+    font-size: 13px;
+    font-weight: 500;
     color: var(--text-muted);
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
   }
 
   .spec dd {
     margin: 4px 0 0;
-    font-size: 14px;
-    color: var(--text);
+    font-size: 15px;
   }
 
-  .spec-tags {
-    padding: 12px 16px 16px;
-  }
-
-  .spec-tags ul {
+  .tags {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
     list-style: none;
-    margin: 10px 0 0;
+    margin: 8px 0 0;
     padding: 0;
   }
 
@@ -267,7 +235,7 @@ const specs = [
   .prose {
     font-size: 17px;
     line-height: 1.75;
-    max-width: 70ch;
+    max-width: 68ch;
   }
 
   .prose :global(> * + *) {
@@ -275,22 +243,16 @@ const specs = [
   }
 
   .prose :global(h2) {
-    font-size: 28px;
-    font-weight: 700;
-    margin-top: 2em;
-    padding-top: 1em;
-    border-top: 1px solid var(--border);
+    font-size: 26px;
+    margin-top: 2.2em;
   }
 
   .prose :global(h2:first-child) {
     margin-top: 0;
-    padding-top: 0;
-    border-top: 0;
   }
 
   .prose :global(h3) {
     font-size: 20px;
-    font-weight: 700;
     margin-top: 1.6em;
   }
 
@@ -301,10 +263,11 @@ const specs = [
 
   .prose :global(strong) {
     color: var(--text);
+    font-weight: 600;
   }
 
   .prose :global(a) {
-    color: var(--accent);
+    color: var(--text);
     text-underline-offset: 3px;
   }
 
@@ -321,7 +284,6 @@ const specs = [
     width: auto;
     max-height: 75vh;
     margin: 0 auto;
-    border: 1px solid var(--border);
     border-radius: var(--radius);
   }
 
@@ -337,22 +299,20 @@ const specs = [
     max-height: 75vh;
     margin: 0 auto;
     background: #000;
-    border: 1px solid var(--border);
     border-radius: var(--radius);
   }
 
   .video figcaption {
     margin-top: 10px;
     text-align: center;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
   }
 
   .prose :global(code) {
     font-family: var(--font-mono);
     font-size: 0.88em;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
+    background: var(--surface);
     border-radius: 4px;
     padding: 1px 5px;
   }
@@ -360,7 +320,6 @@ const specs = [
   .prose :global(pre) {
     padding: 18px 20px;
     border-radius: var(--radius);
-    border: 1px solid var(--border);
     overflow-x: auto;
     font-size: 14px;
     line-height: 1.6;
@@ -368,7 +327,6 @@ const specs = [
 
   .prose :global(pre code) {
     background: none;
-    border: 0;
     padding: 0;
     font-size: inherit;
   }
@@ -385,22 +343,19 @@ const specs = [
   .prose :global(td) {
     text-align: left;
     padding: 10px 14px;
-    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
   .prose :global(th) {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    background: var(--surface-2);
+    font-size: 13px;
+    font-weight: 600;
     color: var(--text);
   }
 
   .prose :global(blockquote) {
     margin-left: 0;
     padding: 4px 0 4px 20px;
-    border-left: 2px solid var(--accent);
+    border-left: 2px solid var(--border-strong);
   }
 
   .pager {
@@ -413,26 +368,18 @@ const specs = [
 
   .pager-link {
     display: grid;
-    gap: 6px;
-    padding: 20px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
+    gap: 4px;
     text-decoration: none;
-    transition: border-color 200ms var(--ease);
-  }
-
-  .pager-link:hover {
-    border-color: var(--accent);
-  }
-
-  .pager-link span {
-    font-size: 13px;
-    color: var(--accent);
   }
 
   .pager-link strong {
     font-size: 18px;
+    font-weight: 600;
+  }
+
+  .pager-link:hover strong {
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   .pager-next {
@@ -440,14 +387,23 @@ const specs = [
     grid-column: 2;
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 860px) {
     .layout {
       grid-template-columns: minmax(0, 1fr);
       gap: 40px;
+      padding-top: 40px;
     }
 
     .spec {
       position: static;
+    }
+
+    .spec dl {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .spec dl div:has(.tags) {
+      grid-column: 1 / -1;
     }
   }
 
